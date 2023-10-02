@@ -4,7 +4,7 @@ import { useState } from "react";
 import './ImcCalc.css';
 import Button from './Button';
 
-const ImcCalc = () => {
+const ImcCalc = ({ calcImc }) => {
 
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
@@ -14,6 +14,22 @@ const ImcCalc = () => {
 
         setHeight("");
         setWeight("");
+    };
+
+    const validDigits = (text) => {
+        return text.replace(/[^0-9,]/g, "")
+    };
+
+    const handleHeightChange = (e) => {
+        const updatedValue = validDigits(e.target.value);
+
+        setHeight(updatedValue);
+    };
+
+    const handleWeightChange = (e) => {
+        const updatedValue = validDigits(e.target.value);
+
+        setWeight(updatedValue);
     };
 
     return (
@@ -29,7 +45,7 @@ const ImcCalc = () => {
                                 name="height"
                                 id="height"
                                 placeholder="Exemplo: 1,70"
-                                onChange={(e) => setHeight(e.target.value)}
+                                onChange={(e) => handleHeightChange(e)}
                                 value={height}
                             />
                         </label>
@@ -43,15 +59,23 @@ const ImcCalc = () => {
                                 name="weight"
                                 id="weight"
                                 placeholder="Peso: 80,3"
-                                onChange={(e) => setWeight(e.target.value)}
+                                onChange={(e) => handleWeightChange(e)}
                                 value={weight}
                             />
                         </label>
                     </div>
                 </div>
                 <div className="action-control">
-                    <Button id="calc-btn" text="Calcular" />
-                    <Button id="clear-btn" text="Limpar" action={clearForm}/>
+                    <Button
+                        id="calc-btn"
+                        text="Calcular"
+                        action={(e) => calcImc(e, height, weight)}
+                    />
+                    <Button
+                        id="clear-btn"
+                        text="Limpar"
+                        action={clearForm}
+                    />
                 </div>
             </form>
         </div>
